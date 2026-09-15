@@ -1,0 +1,33 @@
+# Java / Spring Boot
+target/
+*.class
+
+# Node / React
+node_modules/
+dist/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Credentials
+*-service-account.json
+tts-service-account.json
