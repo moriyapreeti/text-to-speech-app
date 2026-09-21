@@ -4,23 +4,20 @@ import com.tts.app.dto.ErrorResponse;
 
 import jakarta.validation.ConstraintViolationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(
-            MethodArgumentNotValidException.class
-    )
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException exception
     ) {
@@ -34,23 +31,18 @@ public class GlobalExceptionHandler {
                         .map(error -> error.getDefaultMessage())
                         .orElse("Invalid request.");
 
-
         ErrorResponse response =
                 new ErrorResponse(
                         message,
                         HttpStatus.BAD_REQUEST.value()
                 );
 
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
 
-
-    @ExceptionHandler(
-            ConstraintViolationException.class
-    )
+    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(
             ConstraintViolationException exception
     ) {
@@ -61,15 +53,12 @@ public class GlobalExceptionHandler {
                         HttpStatus.BAD_REQUEST.value()
                 );
 
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
-    
-    @ExceptionHandler(
-            InvalidTtsRequestException.class
-    )
+
+    @ExceptionHandler(InvalidTtsRequestException.class)
     public ResponseEntity<ErrorResponse> handleInvalidTtsRequest(
             InvalidTtsRequestException exception
     ) {
@@ -80,12 +69,10 @@ public class GlobalExceptionHandler {
                         HttpStatus.BAD_REQUEST.value()
                 );
 
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
-
 
     @ExceptionHandler(TtsException.class)
     public ResponseEntity<ErrorResponse> handleTtsException(
@@ -98,27 +85,4 @@ public class GlobalExceptionHandler {
                         HttpStatus.BAD_GATEWAY.value()
                 );
 
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_GATEWAY)
-                .body(response);
-    }
-
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(
-            Exception exception
-    ) {
-
-        ErrorResponse response =
-                new ErrorResponse(
-                        "Something went wrong on the server.",
-                        HttpStatus.INTERNAL_SERVER_ERROR.value()
-                );
-
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
-    }
-}
+        return
