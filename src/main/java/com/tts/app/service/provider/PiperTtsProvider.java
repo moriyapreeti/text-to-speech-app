@@ -23,14 +23,13 @@ public class PiperTtsProvider implements TtsProvider {
             VoiceModelService voiceModelService
     ) {
 
-        this.voiceModelService =
-                voiceModelService;
+        this.voiceModelService =voiceModelService;
+                
+        String piperBaseUrl = System.getenv().getOrDefault( "PIPER_BASE_URL", "http://localhost:5000");
 
         this.restClient =
                 RestClient.builder()
-                        .baseUrl(
-                                "http://localhost:5000"
-                        )
+                        .baseUrl(piperBaseUrl)
                         .build();
     }
 
@@ -92,7 +91,7 @@ public class PiperTtsProvider implements TtsProvider {
             throw new TtsException(
                     "Unable to generate speech using Piper TTS. "
                             +
-                    "Please make sure Piper is running on port 5000.",
+                     exception.getMessage(),
                     exception
             );
         }

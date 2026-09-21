@@ -21,15 +21,17 @@ public class PiperVoiceService {
 
     public PiperVoiceService() {
 
-        this.restClient =
-                RestClient.builder()
-                        .baseUrl(
-                                "http://localhost:5000"
-                        )
-                        .build();
+    	String piperBaseUrl =System.getenv().getOrDefault(
+    	                        "PIPER_BASE_URL",
+    	                        "http://localhost:5000"
+    	                );
 
-        this.objectMapper =
-                new ObjectMapper();
+    	this.restClient =RestClient.builder()
+    	                .baseUrl(piperBaseUrl)
+    	                .build();
+
+        this.objectMapper =new ObjectMapper();
+                
     }
 
     public List<VoiceResponse> getAvailableVoices() {
@@ -128,7 +130,7 @@ public class PiperVoiceService {
             throw new TtsException(
                     "Unable to get voices from Piper. "
                             +
-                    "Please make sure Piper is running on port 5000.",
+                    "Please make sure Piper is running on port 5000." + exception.getMessage(),
                     exception
             );
         }
