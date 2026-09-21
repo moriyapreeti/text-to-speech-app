@@ -1,17 +1,13 @@
-FROM eclipse-temurin:21-jdk
-
+# Stage 1: jar build karna
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-
-COPY .mvn .mvn
-COPY mvnw .
-COPY pom.xml .
-
+COPY . .
 RUN chmod +x mvnw
-
 RUN ./mvnw clean package -DskipTests
 
-COPY target/tts-backend-1.0.jar app.jar
-
+# Stage 2: app run karna
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
